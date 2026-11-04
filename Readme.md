@@ -14,6 +14,7 @@ sudo apt install -y \
     build-essential \
     pkg-config \
     libusb-1.0-0-dev \
+    picotool \
     minicom
 ```
 Get the sdk:
@@ -22,9 +23,23 @@ git clone https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk
 git submodule update --init
 ```
+
+Get picotool: 
+```sh
+git clone https://github.com/raspberrypi/picotool.git
+cd picotool
+cmake -S . -B build -G Ninja \
+  -DPICO_SDK_PATH=../../pico-sdk
+cmake --build build
+sudo cmake --install build
+cd ..
+picotool version
+```
+
 Build CMake config: `cmake -S . -B build -G Ninja`.
 This should be done every time you change cmake config or change board.
 
-Then compile: `cmake --build build`
-Copy the uf2 file on the Pico and run `minicom -D <port> -b 115200` to get logs.
+Then compile: `cmake --build build --target flash`
+Run `minicom -D <port> -b 115200` to get logs.
 `<port>` should be something like `/dev/ttyACM0`.
+To close minicom connection, press `Ctrl+A` then `x` then `enter`.

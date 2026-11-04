@@ -24,3 +24,9 @@ pico_enable_stdio_usb(pico_light_station 1)
 pico_enable_stdio_uart(pico_light_station 0)
 
 pico_add_extra_outputs(pico_light_station)
+
+add_custom_target(flash
+    COMMAND sudo picotool load -f -x ${CMAKE_BINARY_DIR}/pico_light_station.uf2
+    DEPENDS pico_light_station
+    COMMENT "Building and flashing Pico 2 W"
+)
