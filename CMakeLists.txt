@@ -7,6 +7,7 @@ include(pico_sdk_import.cmake)
 
 project(pico_light_station C CXX ASM)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -14,10 +15,15 @@ pico_sdk_init()
 
 add_executable(pico_light_station
     src/main.c
+    src/proc/core_0.c
+    src/proc/core_1.c
+    src/storage/ring_buffer.c
 )
 
 target_link_libraries(pico_light_station
     pico_stdlib
+    pico_multicore
+    hardware_adc
 )
 
 pico_enable_stdio_usb(pico_light_station 1)
