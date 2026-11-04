@@ -20,10 +20,32 @@ add_executable(pico_light_station
     src/storage/ring_buffer.c
 )
 
+target_include_directories(pico_light_station PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
 target_link_libraries(pico_light_station
     pico_stdlib
     pico_multicore
     hardware_adc
+    pico_cyw43_arch_lwip_threadsafe_background
+)
+
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/.env" ENV_VARS)
+
+foreach(VAR ${ENV_VARS})
+    if(VAR MATCHES "^([^#][^=]*)=(.*)$")
+        set(${CMAKE_MATCH_1} "${CMAKE_MATCH_2}")
+    endif()
+endforeach()
+
+if(NOT DEFINED WIFI_SSID OR NOT DEFINED WIFI_PASSWORD)
+    message(FATAL_ERROR "WiFi credentials missing from .env")
+endif()
+
+target_compile_definitions(pico_light_station PRIVATE
+    WIFI_SSID="${WIFI_SSID}"
+    WIFI_PASSWORD="${WIFI_PASSWORD}"
 )
 
 pico_enable_stdio_usb(pico_light_station 1)
