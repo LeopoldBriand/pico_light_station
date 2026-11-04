@@ -29,6 +29,11 @@
 #define LWIP_TCP                    1
 #define LWIP_DHCP                   1
 #define LWIP_DNS                    1
+#define LWIP_HTTPD                  1
+#define LWIP_HTTPD_CUSTOM_FILES     1
+#define LWIP_HTTPD_DYNAMIC_HEADERS  1
+#define HTTPD_FSDATA_FILE           "pico_fsdata.inc"
+
 
 #define TCP_MSS                     1460
 #define TCP_WND                     (4 * TCP_MSS)

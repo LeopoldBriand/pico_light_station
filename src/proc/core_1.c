@@ -1,13 +1,16 @@
 #include "core_1.h"
 #include "../storage/ring_buffer.h"
-#include <stdio.h>
+#include "pico/stdlib.h"
+#include "pico/cyw43_arch.h"
+#include "lwip/apps/httpd.h"
 
 static RingBuffer *shared_rb;
 
 void core1_loop(RingBuffer *rb) {
+    httpd_init();
     while (1) {
-        printf("Core1 loop\n");
-        sleep_ms(1500); 
+        cyw43_arch_poll();
+        sleep_ms(1);
     }
 }
 

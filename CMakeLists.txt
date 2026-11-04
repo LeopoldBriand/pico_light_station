@@ -18,6 +18,7 @@ add_executable(pico_light_station
     src/proc/core_0.c
     src/proc/core_1.c
     src/storage/ring_buffer.c
+    src/api/http_api.c
 )
 
 target_include_directories(pico_light_station PRIVATE
@@ -29,6 +30,8 @@ target_link_libraries(pico_light_station
     pico_multicore
     hardware_adc
     pico_cyw43_arch_lwip_threadsafe_background
+    pico_lwip_http
+    pico_httpd_content
 )
 
 file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/.env" ENV_VARS)
@@ -47,6 +50,9 @@ target_compile_definitions(pico_light_station PRIVATE
     WIFI_SSID="${WIFI_SSID}"
     WIFI_PASSWORD="${WIFI_PASSWORD}"
 )
+
+pico_add_library(pico_httpd_content NOFLAG)
+pico_set_lwip_httpd_content(pico_httpd_content INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/html/index.html)
 
 pico_enable_stdio_usb(pico_light_station 1)
 pico_enable_stdio_uart(pico_light_station 0)
