@@ -16,8 +16,10 @@ typedef struct {
     mutex_t lock; 
 } RingBuffer;
 
+extern RingBuffer *shared_rb;
+
 void ring_buffer_init(RingBuffer *buffer);
 void ring_buffer_push(RingBuffer *buffer, DataPoint val);
-DataPoint* ring_buffer_get_all(RingBuffer *buffer);
+size_t ring_buffer_get_all(RingBuffer *buffer, DataPoint *out_array, size_t max_items);
 
 #endif // RING_BUFFER_H

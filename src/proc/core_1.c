@@ -4,9 +4,7 @@
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/httpd.h"
 
-static RingBuffer *shared_rb;
-
-void core1_loop(RingBuffer *rb) {
+void core1_loop() {
     httpd_init();
     while (1) {
         cyw43_arch_poll();

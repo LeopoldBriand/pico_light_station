@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+RingBuffer *shared_rb = NULL;
+
 void ring_buffer_init(RingBuffer *buffer) {
     buffer->head = 0;
     buffer->tail = 0;
@@ -16,35 +18,40 @@ void ring_buffer_push(RingBuffer *buffer, DataPoint val) {
         buffer->tail = (buffer->tail + 1) & BUFFER_MASK;
     } else {
         buffer->count++;
-        printf("Buffer count: %d\n", buffer->count);
     }
 
     buffer->data[buffer->head] = val;
+
+    buffer->head = (buffer->head + 1) & BUFFER_MASK;
+
+    mutex_exit(&buffer->lock);
 
     printf("Timestamp: %llu | Sensor 1: %u | Sensor 2: %u\n",
            (unsigned long long)val.timestamp,
            (unsigned int)val.sensor_1,
            (unsigned int)val.sensor_2);
     
-    buffer->head = (buffer->head + 1) & BUFFER_MASK;
-
-    mutex_exit(&buffer->lock);
 }
 
-DataPoint* ring_buffer_get_all(RingBuffer *buffer) {
+size_t ring_buffer_get_all(
+    RingBuffer *buffer,
+    DataPoint *out_array,
+    size_t max_items
+) {
     mutex_enter_blocking(&buffer->lock);
 
-    size_t items_to_copy = buffer->count;
-    size_t current_tail = buffer->tail;
+    size_t count = buffer->count;
 
-    DataPoint* out_array = (DataPoint*)malloc(items_to_copy * sizeof(DataPoint));
+    if (count > max_items) {
+        count = max_items;
+    }
 
-    for (size_t i = 0; i < items_to_copy; i++) {
-        // Copie des éléments dans l'ordre chronologique (du plus ancien au plus récent)
-        out_array[i] = buffer->data[(current_tail + i) & BUFFER_MASK];
+    for (size_t i = 0; i < count; i++) {
+        out_array[i] =
+            buffer->data[(buffer->tail + i) & BUFFER_MASK];
     }
 
     mutex_exit(&buffer->lock);
-    
-    return out_array;
+
+    return count;
 }

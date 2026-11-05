@@ -43,7 +43,7 @@
     <script>
         async function update() {
             try {
-                const response = await fetch('/api/history');
+                const dataResponse = await fetch('/api/data');
 
                 if (!response.ok)
                     throw new Error('HTTP ' + response.status);
@@ -61,7 +61,7 @@
         }
 
         update();
-        setInterval(update, 2000);
+        setInterval(update, 5000);
     </script>
 </body>
 </html>

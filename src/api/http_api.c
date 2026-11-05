@@ -5,22 +5,25 @@
 
 #include "lwip/apps/fs.h"
 #include "../storage/ring_buffer.h"
-#include "../proc/core_1.h"
 
-extern RingBuffer *shared_rb;
+#include <stdio.h>
 
+static DataPoint points[BUFFER_SIZE];
 static char json[4096];
 
 int fs_open_custom(struct fs_file *file, const char *name)
 {
+    printf("Route %s called", name);
+
     if (strcmp(name, "/api/data") == 0) {
 
-        DataPoint *points = ring_buffer_get_all(shared_rb);
+        size_t count = ring_buffer_get_all(shared_rb, points, BUFFER_SIZE);
+
+        printf("Get %u points", count);
 
         if (points == NULL)
             return 0;
 
-        size_t count = shared_rb->count;
         size_t offset = 0;
 
         offset += snprintf(json + offset, sizeof(json) - offset, "[");
@@ -29,7 +32,7 @@ int fs_open_custom(struct fs_file *file, const char *name)
             offset += snprintf(
                 json + offset,
                 sizeof(json) - offset,
-                "%s{\"timestamp\":%lu,\"sensor_1\":%.2f,\"sensor_2\":%.2f}",
+                "%s{\"timestamp\":%lu,\"sensor_1\":%u,\"sensor_2\":%u}",
                 i ? "," : "",
                 (unsigned long)points[i].timestamp,
                 points[i].sensor_1,
@@ -42,7 +45,6 @@ int fs_open_custom(struct fs_file *file, const char *name)
 
         snprintf(json + offset, sizeof(json) - offset, "]");
 
-        free(points);
     } else if (strcmp(name, "/api/status") == 0) {
         snprintf(json, sizeof(json),
                  "{\"status\":\"online\"}");

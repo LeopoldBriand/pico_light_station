@@ -46,7 +46,7 @@ int main(void)
 
     multicore_launch_core1(core1_entry);
 
-    core0_loop(&rb);
+    core0_loop();
 
     return 0;
 }

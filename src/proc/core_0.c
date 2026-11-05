@@ -1,9 +1,8 @@
 #include "core_0.h"
 #include "../storage/ring_buffer.h"
-#include <stdio.h>
 #include "hardware/adc.h"
 
-void core0_loop(RingBuffer *rb) {
+void core0_loop() {
     while (1) {
         DataPoint new_point;
         new_point.timestamp = time_us_64();
@@ -12,8 +11,7 @@ void core0_loop(RingBuffer *rb) {
         adc_select_input(1);
         new_point.sensor_2 = adc_read();
 
-        ring_buffer_push(rb, new_point);
-        printf("Core0 loop\n");
+        ring_buffer_push(shared_rb, new_point);
         sleep_ms(1000); 
     }
 }
