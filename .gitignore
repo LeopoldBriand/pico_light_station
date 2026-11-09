@@ -2,3 +2,4 @@ pico-sdk
 build
 picotool
 .env
+html/**

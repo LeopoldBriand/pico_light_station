@@ -1,0 +1,31 @@
+body {
+   font-family: Arial, sans-serif;
+   background: #111827;
+   color: white;
+   padding: 30px;
+}
+
+.card {
+   background: #1f2937;
+   padding: 20px;
+   border-radius: 12px;
+   max-width: 700px;
+   margin: auto;
+}
+
+h1 {
+   color: #38bdf8;
+}
+
+.chart-container {
+   background: #111827;
+   padding: 15px;
+   border-radius: 8px;
+   max-width: 900px;
+   margin: auto;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+#status {
+   color: #34d399;
+}

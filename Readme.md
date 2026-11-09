@@ -36,10 +36,19 @@ cd ..
 picotool version
 ```
 
+Build client project: 
+```sh
+cd client
+npm ci
+npm run build
+``` 
+
 Build CMake config: `cmake -S . -B build -G Ninja`.
 This should be done every time you change cmake config or change board.
 
-Then compile: `cmake --build build --target flash`
+Then compile: `cmake --build build`
+Load: `sudo picotool load -f build/pico_light_station.uf2`
+Or do both: `cmake --build build --target flash` (only work if it doesn't have to ask for sudo)
 Run `minicom -D <port> -b 115200` to get logs.
 `<port>` should be something like `/dev/ttyACM0`.
 To close minicom connection, press `Ctrl+A` then `x` then `enter`.
