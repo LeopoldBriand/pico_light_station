@@ -49,7 +49,7 @@ function drawChart(data) {
         let date = new Date(params[0].value[0]).toLocaleTimeString();
         let res = `<b>Time: ${date}</b><br/>`;
         params.forEach(item => {
-          res += `${item.marker} ${item.seriesName}: ${item.value[1]} °C<br/>`;
+          res += `${item.marker} ${item.seriesName}: ${item.value[1]} Lux<br/>`;
         });
         return res;
       }
