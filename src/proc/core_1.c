@@ -5,6 +5,24 @@
 #include "lwip/apps/httpd.h"
 
 void core1_loop() {
+    if (cyw43_arch_init()) {
+        return -1;
+    }
+
+    cyw43_arch_enable_sta_mode();
+
+    printf("Connecting to WiFi...\n");
+
+    if (cyw43_arch_wifi_connect_timeout_ms(
+            WIFI_SSID,
+            WIFI_PASSWORD,
+            CYW43_AUTH_WPA2_AES_PSK,
+            30000)) {
+        printf("WiFi connection failed\n");
+        return -1;
+    }
+
+    printf("Connected!\n");
     httpd_init();
     while (1) {
         cyw43_arch_poll();

@@ -3,6 +3,10 @@
 #include "hardware/adc.h"
 
 void core0_loop() {
+    adc_init();
+    adc_gpio_init(26);
+    adc_gpio_init(27);
+
     while (1) {
         DataPoint new_point;
         new_point.timestamp = time_us_64();
