@@ -12,6 +12,6 @@ void core0_loop() {
         new_point.sensor_2 = adc_read();
 
         ring_buffer_push(shared_rb, new_point);
-        sleep_ms(1000); 
+        sleep_ms(60000); 
     }
 }

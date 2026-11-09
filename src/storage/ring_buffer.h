@@ -1,7 +1,7 @@
 #ifndef RING_BUFFER_H
 #define RING_BUFFER_H
 
-#define BUFFER_SIZE 16 
+#define BUFFER_SIZE 1440 // 24*60
 #define BUFFER_MASK (BUFFER_SIZE - 1)
 
 #include <stdio.h>
