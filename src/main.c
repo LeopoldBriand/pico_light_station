@@ -3,12 +3,30 @@
 #include "pico/multicore.h"
 #include "proc/core_0.h"
 #include "proc/core_1.h"
+#include "pico/cyw43_arch.h"
 #include "storage/ring_buffer.h"
 
 int main(void)
 {
     stdio_init_all();
+    if (cyw43_arch_init()) {
+        return -1;
+    }
 
+    cyw43_arch_enable_sta_mode();
+
+    printf("Connecting to WiFi...\n");
+
+    if (cyw43_arch_wifi_connect_timeout_ms(
+            WIFI_SSID,
+            WIFI_PASSWORD,
+            CYW43_AUTH_WPA2_AES_PSK,
+            30000)) {
+        printf("WiFi connection failed\n");
+    }
+
+    printf("Connected!\n");
+    
     printf("================================\n");
     printf("      PICO LIGHT MONITOR\n");
     printf("================================\n");
